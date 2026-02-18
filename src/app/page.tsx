@@ -117,7 +117,7 @@ export default function Home() {
                   onSelect={(id) => {
                     setSelectedEra(id);
                     // Clear any previous result/error on new selection
-                    if (appState === "error" || appState === "result") {
+                    if (appState === "error") {
                       setAppState("idle");
                     }
                   }}
