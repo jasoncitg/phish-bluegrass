@@ -39,7 +39,6 @@ interface PhishNetEntry {
   state: string;
   country: string;
   tourname: string | null;
-  artistid: string;
 }
 
 // Fisher-Yates shuffle
@@ -61,7 +60,7 @@ async function fetchSongPlays(song: BluegrassSong, apiKey: string): Promise<Phis
   if (!res.ok) return [];
 
   const json = await res.json();
-  if (json.error_code !== 0 || !Array.isArray(json.data)) return [];
+  if (!Array.isArray(json.data)) return [];
 
   return json.data as PhishNetEntry[];
 }
@@ -96,9 +95,9 @@ export async function GET(request: NextRequest) {
     try {
       const plays = await fetchSongPlays(song, apiKey);
 
-      // Filter to Phish (artistid "1") and the chosen era
+      // Filter to the chosen era's years
       const eraPlays = plays.filter(
-        (p) => p.artistid === "1" && eraYears.has(parseInt(p.showyear, 10))
+        (p) => eraYears.has(parseInt(p.showyear, 10))
       );
 
       if (eraPlays.length === 0) continue;
